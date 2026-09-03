@@ -1,0 +1,6 @@
+interface:
+  display_name: "Repo Work"
+  short_description: "Audit repositories, shape refactor cards, and execute authorized cleanup"
+  default_prompt: "Choose audit or refactor mode from the request. Audit is read-only and evidence-backed; refactor begins with a bounded plan, resolves the selected seam, and proves the result."
+policy:
+  allow_implicit_invocation: true
