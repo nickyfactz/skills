@@ -1,0 +1,11 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
+	"javascript": { "globals": ["secs", "cur", "maxStep", "next", "prev", "go"] },
+	"overrides": [
+		{
+			"includes": ["deck-notes.js"],
+			"linter": { "rules": { "correctness": { "noUnusedVariables": "off" } } }
+		}
+	],
+	"html": { "formatter": { "enabled": true } }
+}

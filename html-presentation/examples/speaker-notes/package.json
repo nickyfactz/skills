@@ -1,0 +1,13 @@
+{
+	"name": "speaker-notes-example",
+	"private": true,
+	"scripts": {
+		"format": "biome format --write .",
+		"format:check": "biome format .",
+		"lint": "biome lint .",
+		"test": "node --test test_messages.js"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.2"
+	}
+}

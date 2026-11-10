@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Speaker notes | __TITLE__</title>
+		<style>
+		:root {
+			--bg: #16213a;
+			--panel: #1f2c4a;
+			--ink: #f1f4fa;
+			--dim: #9aa7c4;
+			--amber: #ffec99;
+			--green: #b2f2bb;
+			--red: #ffc9c9;
+			--body:
+				"Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial,
+				sans-serif;
+			--mono: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+		}
+		* {
+			box-sizing: border-box;
+		}
+		html,
+		body {
+			height: 100%;
+		}
+		body {
+			margin: 0;
+			background: var(--bg);
+			color: var(--ink);
+			font-family: var(--body);
+			font-size: 22px;
+			line-height: 1.45;
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+		}
+		button {
+			font: inherit;
+			color: inherit;
+			cursor: pointer;
+		}
+		:focus-visible {
+			outline: 3px solid var(--amber);
+			outline-offset: 2px;
+		}
+		#bar {
+			display: flex;
+			align-items: center;
+			gap: 22px;
+			padding: 12px 26px;
+			background: var(--panel);
+			flex-wrap: wrap;
+		}
+		#clock {
+			font-family: var(--mono);
+			font-size: 44px;
+			font-weight: 600;
+			letter-spacing: 0.02em;
+			min-width: 4.2ch;
+		}
+		#clock.over {
+			color: var(--red);
+		}
+		.meta {
+			font-size: 16px;
+			color: var(--dim);
+			line-height: 1.35;
+		}
+		.meta b {
+			color: var(--ink);
+			font-weight: 600;
+			font-size: 19px;
+		}
+		#bar .sp {
+			flex: 1;
+		}
+		#bar button {
+			background: none;
+			border: 1.5px solid #47557a;
+			border-radius: 8px;
+			padding: 5px 14px;
+			font-size: 15px;
+		}
+		#bar button:hover {
+			border-color: var(--amber);
+		}
+		#link {
+			font-size: 14px;
+			padding: 3px 12px;
+			border-radius: 99px;
+			background: #33415f;
+			color: var(--dim);
+		}
+		#link.on {
+			background: var(--green);
+			color: #12351c;
+		}
+		main {
+			overflow-y: auto;
+			padding: 26px clamp(22px, 5vw, 70px) 40px;
+		}
+		.note {
+			display: none;
+			max-width: 60ch;
+		}
+		.note.active {
+			display: block;
+		}
+		.note .min {
+			font-family: var(--mono);
+			font-size: 17px;
+			color: var(--amber);
+		}
+		.note h1 {
+			font-size: 34px;
+			line-height: 1.15;
+			margin: 4px 0 0;
+		}
+		.note .screen {
+			margin: 14px 0 0;
+			padding: 10px 16px;
+			border-left: 4px solid var(--amber);
+			background: var(--panel);
+			font-size: 19px;
+			color: var(--dim);
+		}
+		.note .screen b {
+			color: var(--ink);
+			font-weight: 600;
+		}
+		.note .cue {
+			margin: 12px 0 0;
+			font-size: 19px;
+			color: var(--green);
+		}
+		.note h3 {
+			font-size: 15px;
+			text-transform: uppercase;
+			letter-spacing: 0.09em;
+			color: var(--dim);
+			margin: 28px 0 6px;
+			font-weight: 600;
+		}
+		.note ul {
+			margin: 0;
+			padding-left: 1.1em;
+		}
+		.note li {
+			margin: 9px 0;
+		}
+		.note table {
+			border-collapse: collapse;
+			width: 100%;
+			font-size: 18px;
+			margin-top: 6px;
+		}
+		.note th,
+		.note td {
+			text-align: left;
+			padding: 6px 10px;
+			border-bottom: 1px solid #33415f;
+			vertical-align: top;
+		}
+		.note th {
+			color: var(--dim);
+			font-weight: 600;
+			font-size: 15px;
+		}
+		.note .src {
+			font-size: 15px;
+			color: var(--dim);
+			margin-top: 22px;
+		}
+		.note .then {
+			margin-top: 30px;
+			padding-top: 16px;
+			border-top: 1px dashed #47557a;
+			font-size: 21px;
+		}
+		.note .then span {
+			color: var(--dim);
+			font-size: 15px;
+			text-transform: uppercase;
+			letter-spacing: 0.09em;
+			display: block;
+		}
+		.step {
+			font-family: var(--mono);
+			font-size: 16px;
+			color: var(--amber);
+			margin-top: 10px;
+			min-height: 1.4em;
+		}
+		#toc {
+			display: flex;
+			gap: 6px;
+			padding: 10px 20px;
+			background: var(--panel);
+			overflow-x: auto;
+		}
+		#toc button {
+			flex: none;
+			background: none;
+			border: 0;
+			border-bottom: 3px solid transparent;
+			padding: 4px 10px;
+			font-size: 14.5px;
+			color: var(--dim);
+			white-space: nowrap;
+		}
+		#toc button[aria-current="true"] {
+			color: #fff;
+			border-bottom-color: var(--amber);
+		}
+		</style>
+	</head>
+	<body>
+		<div id="bar">
+			<div id="clock" aria-label="Elapsed time">00:00</div>
+			<div class="meta">
+				<b id="pos"></b>
+				<br>
+				<span id="target"></span>
+			</div>
+			<div class="sp"></div>
+			<span id="link">not linked: arrows move these notes only</span>
+			<button type="button" id="startstop">start clock</button>
+			<button type="button" id="reset">reset</button>
+		</div>
+		<main id="main" data-end="__END__">__NOTES__</main>
+		<nav id="toc" aria-label="Sections"></nav>
+		<script>
+		(() => {
+			"use strict";
+			var notes = [].slice.call(document.querySelectorAll(".note")),
+				cur = 0,
+				toc = document.getElementById("toc");
+			var linked = false,
+				linkEl = document.getElementById("link");
+			// Bind once to our opener; arbitrary messages must never replace the peer.
+			var deckWindow = window.opener,
+				deckOrigin =
+					window.location.protocol === "file:"
+						? "null"
+						: window.location.origin;
+			var deckTargetOrigin = deckOrigin === "null" ? "*" : deckOrigin;
+			var END = mins(document.getElementById("main").dataset.end || "45:00");
+			var clock = document.getElementById("clock"),
+				t0 = 0,
+				acc = 0,
+				running = false,
+				ss = document.getElementById("startstop");
+			function mins(s) {
+				var p = s.split(":");
+				return +p[0] * 60 + +p[1];
+			}
+			function show(i, step, max) {
+				i = Math.max(0, Math.min(notes.length - 1, i));
+				cur = i;
+				notes.forEach((n, k) => {
+					n.classList.toggle("active", k === i);
+				});
+				toc.querySelectorAll("button").forEach((b, k) => {
+					if (k === i) b.setAttribute("aria-current", "true");
+					else b.removeAttribute("aria-current");
+				});
+				var n = notes[i],
+					nx = notes[i + 1];
+				document.getElementById("pos").textContent =
+					`${i + 1} of ${notes.length}: ${n.dataset.title}`;
+				document.getElementById("target").textContent =
+					`starts at ${n.dataset.min}` +
+					(nx ? `, next section at ${nx.dataset.min}` : `, end at ${fmt(END)}`);
+				var st = n.querySelector(".step");
+				if (st) st.textContent = max ? `On screen: step ${step} of ${max}` : "";
+				document.getElementById("main").scrollTop = 0;
+				tick();
+			}
+			function setLinked(v) {
+				linked = v;
+				linkEl.classList.toggle("on", v);
+				linkEl.textContent = v
+					? "linked to the deck"
+					: "not linked: arrows move these notes only";
+			}
+			function cmd(c, i) {
+				if (linked && deckWindow && !deckWindow.closed) {
+					deckWindow.postMessage({ sf: "cmd", cmd: c, i: i }, deckTargetOrigin);
+					return true;
+				}
+				setLinked(false);
+				return false;
+			}
+			notes.forEach((n, i) => {
+				var b = document.createElement("button");
+				b.type = "button";
+				b.textContent = `${n.dataset.min} ${n.dataset.title}`;
+				b.addEventListener("click", () => {
+					if (!cmd("go", i)) show(i, 0, 0);
+				});
+				toc.appendChild(b);
+			});
+			window.addEventListener("message", (e) => {
+				if (
+					!deckWindow ||
+					deckWindow.closed ||
+					e.source !== deckWindow ||
+					e.origin !== deckOrigin
+				)
+					return;
+				var d = e.data;
+				if (!d || typeof d !== "object" || Array.isArray(d) || d.sf !== "state")
+					return;
+				if (!Number.isInteger(d.i) || d.i < 0 || d.i >= notes.length) return;
+				if (
+					!Number.isInteger(d.step) ||
+					!Number.isInteger(d.max) ||
+					d.step < 0 ||
+					d.max < d.step
+				)
+					return;
+				setLinked(true);
+				if (!running && d.i > 0 && !acc) start();
+				show(d.i, d.step, d.max);
+			});
+			document.addEventListener("keydown", (e) => {
+				if (e.metaKey || e.ctrlKey || e.altKey) return;
+				var k = e.key;
+				if (k === "ArrowRight" || k === "PageDown") {
+					e.preventDefault();
+					if (!cmd("next")) show(cur + 1, 0, 0);
+				} else if (k === "ArrowLeft" || k === "PageUp") {
+					e.preventDefault();
+					if (!cmd("prev")) show(cur - 1, 0, 0);
+				}
+			});
+			function fmt(s) {
+				var m = Math.floor(s / 60),
+					x = Math.floor(s % 60);
+				return `${m < 10 ? "0" : ""}${m}:${x < 10 ? "0" : ""}${x}`;
+			}
+			function elapsed() {
+				return acc + (running ? (Date.now() - t0) / 1000 : 0);
+			}
+			function tick() {
+				var s = elapsed();
+				clock.textContent = fmt(s);
+				var nx = notes[cur + 1];
+				clock.classList.toggle("over", s > (nx ? mins(nx.dataset.min) : END));
+			}
+			function start() {
+				running = true;
+				t0 = Date.now();
+				ss.textContent = "pause clock";
+			}
+			ss.addEventListener("click", () => {
+				if (running) {
+					acc = elapsed();
+					running = false;
+					ss.textContent = "start clock";
+				} else start();
+				tick();
+			});
+			document.getElementById("reset").addEventListener("click", () => {
+				acc = 0;
+				t0 = Date.now();
+				tick();
+			});
+			setInterval(tick, 500);
+			var h = notes.findIndex((n) => `#${n.id}` === location.hash);
+			show(h >= 0 ? h : 0, 0, 0);
+			if (deckWindow && !deckWindow.closed) {
+				deckWindow.postMessage({ sf: "hello" }, deckTargetOrigin);
+			}
+		})();
+		</script>
+	</body>
+</html>

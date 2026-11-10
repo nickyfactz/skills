@@ -50,7 +50,7 @@ Move to HTML when the user explicitly approves the plan, says it is ready, asks 
 
 ## 4. Design the HTML presentation
 
-Before coding, read `references/html-design.md` and `references/frontend-design.md`. If the presentation contains sourced claims, external resources, or deep-dive material, also read `references/source-handling.md`.
+Before coding, read `references/html-design.md` and `references/frontend-design.md`. If the presentation contains sourced claims, external resources, or deep-dive material, also read `references/source-handling.md`. If the plan carries talking points for the presenter and the talk has a time budget, also read `references/speaker-notes.md` and build the notes window.
 
 Implement the approved plan as one `.html` file with inline CSS and inline JavaScript. The file must open directly from local disk without a server or backend.
 
